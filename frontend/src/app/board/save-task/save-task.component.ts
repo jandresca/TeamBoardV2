@@ -32,7 +32,7 @@ export class SaveTaskComponent implements OnInit {
   ngOnInit(): void {}
 
   saveTask() {
-    if (!this.registerData.name || !this.registerData.description) {
+    if (!this.registerData.name || !this.registerData.description || !this.registerData.priority) {
       this.message = 'Failed process: Imcomplete data';
       this.openSnackBarError();
       this.registerData = {};
@@ -57,15 +57,18 @@ export class SaveTaskComponent implements OnInit {
   }
 
   saveTaskImg() {
-    if (!this.registerData.name || !this.registerData.description) {
+    if (!this.registerData.name || !this.registerData.description || !this.registerData.priority) {
       this.message = 'Failed process: Imcomplete data';
       this.openSnackBarError();
       this.registerData = {};
     } else {
       const data = new FormData();
-      data.append('image', this.selectedFile, this.selectedFile.name);
+      if (this.selectedFile != null) {
+      data.append('image', this.selectedFile, this.selectedFile.name);  
+      }
       data.append('name', this.registerData.name);
       data.append('description', this.registerData.description);
+      data.append('priority', this.registerData.priority);
 
       this._boardService.saveTaskImg(data).subscribe(
         (res) => {

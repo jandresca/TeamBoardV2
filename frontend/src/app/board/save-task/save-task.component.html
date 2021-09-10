@@ -20,6 +20,14 @@
               required
             />
           </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Por favor seleccione la prioridad </mat-label>
+            <mat-select [(ngModel)]="registerData.priority">
+              <mat-option value="1">Alta</mat-option>
+              <mat-option value="2">Media</mat-option>
+              <mat-option value="3">Baja</mat-option>
+            </mat-select>
+          </mat-form-field>
           <input type="file" (change)="uploadImg($event)" />
         </div>
       </mat-card-content>

@@ -18,6 +18,7 @@ export class ListTaskComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   durationInSeconds: number = 2;
 
+
   constructor(
     private _boardService: BoardService,
     private _snackBar: MatSnackBar

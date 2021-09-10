@@ -7,6 +7,27 @@
             <mat-panel-title>
               <span>{{ task.name }}</span>
               <span class="spacer"></span>
+              <span><button
+                class="btnDone"
+                *ngIf="task.priority == '1'"
+                mat-raised-button
+              >
+                Alto
+              </button>
+              <button
+                class="btnInProgress"
+                *ngIf="task.priority == '2'"
+                mat-raised-button
+              >
+                Medio
+              </button>
+              <button
+                class="btnToDo"
+                *ngIf="task.priority == '3'"
+                mat-raised-button
+              >
+                Bajo
+              </button></span> 
               <button
                 class="btnDone"
                 *ngIf="task.taskStatus == 'done'"

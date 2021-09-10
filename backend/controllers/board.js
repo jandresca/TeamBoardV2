@@ -5,7 +5,7 @@ const path = require("path");
 const moment = require("moment");
 
 const saveTask = async (req, res) => {
-  if (!req.body.name || !req.body.description)
+  if (!req.body.name || !req.body.description || !req.body.priority)
     return res.status(400).send("Incomplete data");
 
   const board = new Board({
@@ -13,6 +13,7 @@ const saveTask = async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     taskStatus: "to-do",
+    priority: req.body.priority
   });
 
   const result = await board.save();
@@ -21,14 +22,14 @@ const saveTask = async (req, res) => {
 };
 
 const listTask = async (req, res) => {
-  const board = await Board.find({ userId: req.user._id });
+  const board = await Board.find({ userId: req.user._id }).sort( { priority: req.body.priority } );
   if (!board || board.length === 0)
     return res.status(400).send("You have no assigned tasks");
   return res.status(200).send({ board });
 };
 
 const saveTaskImg = async (req, res) => {
-  if (!req.body.name || !req.body.description)
+  if (!req.body.name || !req.body.description || !req.body.priority)
     return res.status(400).send("Incomplete data");
 
   let imageUrl = "";
@@ -51,6 +52,7 @@ const saveTaskImg = async (req, res) => {
     description: req.body.description,
     taskStatus: "to-do",
     imageUrl: imageUrl,
+    priority: req.body.priority
   });
 
   const result = await board.save();
@@ -78,8 +80,19 @@ const deleteTask = async (req, res) => {
   const validId = mongoose.Types.ObjectId.isValid(req.params._id);
   if (!validId) return res.status(400).send("Invalid id");
 
+  let taskImg = await Board.findById(req.params._id);
+  taskImg = taskImg.imageUrl;
+  taskImg = taskImg.split("/")[4];
+  let serverImg = "./uploads/" + taskImg;
+
   const board = await Board.findByIdAndDelete(req.params._id);
   if (!board) return res.status(400).send("Task not found");
+
+  try {
+    fs.unlinkSync(serverImg);
+  } catch (e) {
+    console.log("image no found in server");
+  }
   return res.status(200).send({ message: "Task deleted" });
 };
 

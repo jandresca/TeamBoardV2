@@ -6,6 +6,7 @@ const boardSchema = new mongoose.Schema({
   description: String,
   taskStatus: String,
   imageUrl: String,
+  priority: Number,
   date: { type: Date, default: Date.now },
 });
 
